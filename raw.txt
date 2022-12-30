@@ -1,0 +1,212 @@
+Data Engineer
+	CS Fundamentals
+		CS Base
+			How does the computer work
+			How does the internet work
+		Data Structures & Algorithms
+		APIs
+		Structured vs Unstructured data
+		Serialization
+		Terminal usage
+		Git
+		Linux
+			CLI
+			Shell scripting
+			Cron Jobs
+		Networking
+			Protocols
+				TCP UDP
+				SSH
+				DNS
+			Firewalls
+			VPN VPC
+	Programming Language
+		Python
+		Scala
+		Go
+		Java
+	DB Fundamentals
+		SQL
+		ACID Transactions
+		Distributed SQL
+			dremio
+			trino
+			presto
+		CAP Theorem
+		OLAP vs OLTP
+		Normalizations
+		Horizontal & Vertical Scaling
+		ER Diagrams
+	Cluster Computing Fundamentals
+		Apache Hadoop
+		HDFS
+		ETL ELT
+		Map Reduce
+		YARN
+		Managed Hadoop
+			Yandex Data Proc
+			Apache Ambari
+			Amazon EMR
+			Google Dataproc
+			Azure Data Lake
+	Databases
+		Relational Databases
+			PostgreSQL
+			MySQL
+			MariaDB
+		Non-relational Databases
+			Document
+				MongoDB
+				Elasticsearch
+			Column-oriented
+				Apache Hbase
+				Apache Cassandra
+				Google Bigtable
+			Key-Value
+				Redis
+				Memcached
+			Graph
+				Neo4j
+				ArangoDB
+				Amazon Neptune
+		Data Warehouses
+			Apache Hive
+			ClickHouse
+			Snowflake
+			Apache Impala
+			Amazon Redshift
+			Google BigQuery
+			Azure Synapse
+		MPP (Massively Parallel Processing)
+			Greenplume
+			Vertica
+			Teradata
+		Object Storage
+			Yandex Object Storage
+			Amazone S3
+			Google Cloud Storage
+			Azure Blob Storage
+		Storage Design
+			Data Warehouse Design
+				Kimball
+				Inmon
+				DW 2.0
+				Data Vault v2.0
+				Anchor
+			Lakes Design
+				Data Lake
+				Data Lakehouse
+			Data Mesh
+			Data Fabric
+	Data Processing
+		Batch
+			Apache Arrow
+			DBT (Data Build Tool)
+		Hybrid
+			Apache Spark
+			Apache Beam
+			Apache Flink
+			Apache NiFi
+		Stream
+			Apache Kafka
+			Apache Storm
+			Amazon Kinesis
+			Google Pub Sub
+		Messaging
+			RabbitMQ
+			ActiveMQ
+			Amazon SNS & SQS
+			Azure Service Bus
+	Testing
+		Unit Testing
+			unittest
+			jUnit
+			TestNG
+		Integration Testing
+			pytest
+			dbUnit
+			Test containers
+		Load Testing
+			Gatling
+	Workflow
+		Apache Airflow
+		Flyte
+		Prefect
+		Google Composer
+		Apache Oozie
+		Luigi
+		Azkaban
+	Monitoring
+		Prometheus
+		Datadog
+		Sentry
+		Graphite
+		Graphana
+	Infrastructure
+		Apache Mesos
+		Docker
+		Kubernetes
+		CI CD
+			Jenkins
+			GitHub Pipelines
+			GitLab Pipelines
+			Circle CI
+	Data Governance
+		Approaches
+			Data Catalog
+			Data Lineage
+		Tools
+			DBT
+			Atlas
+			Datahub
+			Amundsen
+	Data Security & Privacy
+		Legal Compliance
+			PCI vs PII vs PHI
+			GDPR
+		Key Management
+		Access Management
+		Data Masking
+		Data Tokenization
+		Encryption
+			RSA
+			AES
+			OpenPGP
+	Data Quality
+		great_expectations
+		pydeequ
+		Apache Griffin
+	Visualization (BI)
+		Data structures use cases for BI
+		Data Visualization
+		BI Tools features and specificity
+			Tableau
+			Qlik
+			Looker
+			Superset
+	Machine Learning
+		Terminologies
+			Supervised learning
+			Unsupervised learning
+			Evaluation Metrics
+		Classical ML Algorithms
+			Linear Regression
+			Decision Tree
+			Random Forest
+			K-Means
+			kNN
+		ML Practices
+			Feature Store
+			Model Tracking
+			Model Serving
+			Continuous Learning
+		ML Ops
+			DVC
+			MLFlow
+			Kubeflow
+			Amazon SageMaker
+			Google AI Platform
+			ClearML
+			H2O.AI
+			Tecton
+			Feast
