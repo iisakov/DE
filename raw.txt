@@ -1,4 +1,89 @@
 Data Engineer
+	Math
+		Linear algebra
+			Vectors and spaces
+			Matrix transformations
+			Alternate coordinate systems (bases)
+		Precalculus
+			Composite and inverse functions
+			Trigonometry
+			Complex numbers
+			Rational functions
+			Conic sections
+			Vectors
+			Matrices
+			Probability and combinatorics
+			Series
+			Limits and continuity
+		Integral Calculus
+			Integrals
+			Differential equations
+			Applications of integrals
+			Parametric equations, polar coordinates, and vector-valued functions
+			Series
+		Differential Calculus
+			Limits and continuity
+			Derivatives: definition and basic rules
+			Derivatives: chain rule and other advanced topics
+			Applications of derivatives
+			Analyzing functions
+			Parametric equations, polar coordinates, and vector-valued functions
+		Trigonometry
+			Right triangles & trigonometry
+			Trigonometric functions
+			Non-right triangles & trigonometry
+			Trigonometric equations and identities
+		Statistics and probability
+			Analyzing categorical data
+			Displaying and comparing quantitative data
+			Summarizing quantitative data
+			Modeling data distributions
+			Exploring bivariate numerical data
+			Study design
+			Probability
+			Counting, permutations, and combinations
+			Random variables
+			Sampling distributions
+			Confidence intervals
+			Significance tests (hypothesis testing)
+			Two-sample inference for the difference between groups
+			Inference for categorical data (chi-square tests)
+			Advanced regression (inference and transforming)
+			Analysis of variance (ANOVA)
+	English
+		A
+			A1
+				Reading
+				Listening
+				Writing
+				Grammar
+			A2
+				Reading
+				Listening
+				Writing
+				Grammar
+		B
+			B1
+				Reading
+				Listening
+				Writing
+				Grammar
+			B2
+				Reading
+				Listening
+				Writing
+				Grammar
+		C
+			C1
+				Reading
+				Listening
+				Writing
+				Grammar
+			C2
+				Reading
+				Listening
+				Writing
+				Grammar
 	CS Fundamentals
 		CS Base
 			How does the computer work

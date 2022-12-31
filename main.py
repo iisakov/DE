@@ -5,6 +5,7 @@ import config
 
 # общие пакеты
 import sys
+from itertools import chain
 
 from importlib import import_module
 
@@ -18,9 +19,10 @@ def main(cli_params):
 
                 # Получаем существующие ключи параметров для модуля из конфига
                 existing_params = [existing_sub_param_tpl for existing_sub_param_tpl in config.cli_params_dict[existing_param_tpl]['sub_params'].keys()]
+                existing_params = list(chain(*existing_params))
 
                 # Собираем аргументы из консоли для модуля
-                modul_args = set(x for x in cli_params if x.split(':')[0] in existing_params)
+                modul_args = tuple(x for x in cli_params if x.split(':')[0] in existing_params)
                 modul_args = {x.split(':')[0]: x.split(':')[1] for x in modul_args}
 
                 # Подключение модуля todo разделить подключение модуля и запуск модуля. В идеале добавить приоритетность запуска модулей
