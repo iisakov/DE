@@ -11,3 +11,20 @@ cli_params_dict = {('-i', '--init'): {'description':    'Первый запус
                                                          }
                                       }
                    }
+
+
+default_init_study = False
+default_exam_complete = False
+default_hours_spent = 0
+default_importance = 1
+default_required_number_of_hours = 7 * 1.5
+default_score = default_importance*100 - default_hours_spent*default_importance*100/default_required_number_of_hours \
+                if default_hours_spent != 0 \
+                else 100 * default_importance
+
+progress_file_data = {'init_study': default_init_study,
+                      'exam_complete': default_exam_complete,
+                      'hours_spent': default_hours_spent,
+                      'importance': default_importance,
+                      'required_number_of_hours': default_required_number_of_hours,
+                      'score': default_score}

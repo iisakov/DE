@@ -4,6 +4,11 @@ import re
 import json
 
 
+# todo добавить в каждую конечную папку(предмет) папку с названием "prepared material"
+
+# todo добавить модуль calculate_progress для пересчёта прогресса
+# todo добавить модуль selection для выбора предмета для изучения сегодня
+
 # Читаем значение из многомерного словаря
 # Формат спаска ключей [key, ...]
 def get_from_dict(data_dict, map_list) -> any:
@@ -13,27 +18,28 @@ def get_from_dict(data_dict, map_list) -> any:
 
 
 # Пишем значение в многомерный словарь - если ключи существуют
-# Формат спаска ключей [key, ...]
-def set_in_dict(data_dict, map_list, value) -> bool:
-    try:
+# Формат списка ключей [key, ...]
+def set_in_dict(data_dict, map_list, value):
         for k in map_list[:-1]:
             data_dict = data_dict[k]
         data_dict[map_list[-1]] = value
-        return True
-    except KeyError:
-        return False
 
 
 # Создание структуры папок по словарю, где ключ это название папки, значение это вложенный словарь с такой же структурой.
 def make_dir_by_dict(data_dict, init_dir_path):
-    try:
         for i in data_dict:
             if i not in os.listdir('.' + '/' + init_dir_path):
                 os.makedirs(init_dir_path + i)
             make_dir_by_dict(data_dict[i], init_dir_path + i + '/')
-        return True
-    except FileNotFoundError:
-        return False
+
+
+def make_file(dir_path, file_name, json_data):
+    for dir_name in os.listdir(dir_path):
+        if '.' in dir_name:
+            continue
+        new_dir_path = dir_path + dir_name + '/'
+        json.dump(json_data, open(new_dir_path + file_name, 'w'))
+        make_file(dir_path + dir_name + '/', file_name, json_data)
 
 
 def read_raw_fp(init_file_path, init_shift_value, init_max_nesting_level):
@@ -87,3 +93,7 @@ def run(argv):
 
     make_dir_by_dict(data_dict=data_dict,
                      init_dir_path=params['init_dir_path'])
+
+    make_file(dir_path=params['init_dir_path'],
+              file_name='progress.json',
+              json_data=config.progress_file_data)
