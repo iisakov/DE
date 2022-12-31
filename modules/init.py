@@ -4,11 +4,11 @@ import os
 import re
 import json
 
+from . import sqltools
 
-# todo добавить в каждую конечную папку(предмет) папку с названием "prepared material"
 
-# todo добавить модуль calculate_progress для пересчёта прогресса
-# todo добавить модуль selection для выбора предмета для изучения сегодня
+# TODO Добавить sqllite для работы с данными
+
 
 # Читаем значение из многомерного словаря
 # Формат спаска ключей [key, ...]
@@ -21,9 +21,9 @@ def get_from_dict(data_dict, map_list) -> any:
 # Пишем значение в многомерный словарь - если ключи существуют
 # Формат списка ключей [key, ...]
 def set_in_dict(data_dict, map_list, value):
-        for k in map_list[:-1]:
-            data_dict = data_dict[k]
-        data_dict[map_list[-1]] = value
+    for k in map_list[:-1]:
+        data_dict = data_dict[k]
+    data_dict[map_list[-1]] = value
 
 
 # Создание структуры папок по словарю, где ключ это название папки, значение это вложенный словарь с такой же структурой.
@@ -46,7 +46,7 @@ def furnishing_frame(dir_path, file_name, json_data, list_lower_lvl_dirs=()):
     # Если это конечная папка, создаём в ней список папок самого нижнего уровня
     if len(list_dir) == 0:
         for list_lower_lvl_dir in list_lower_lvl_dirs:
-                os.makedirs(dir_path + list_lower_lvl_dir)
+            os.makedirs(dir_path + list_lower_lvl_dir)
 
     # Рекурсивно проходим по всем папкам в каркасе
     for dir_name in list_dir:
@@ -60,7 +60,8 @@ def read_raw_fp(init_file_path, init_shift_value):
         body = fp.read()
         elem_list = body.split('\n')  # Делим файл на строки
     result = {'header': header,
-              'body': {}}
+              'body': {},
+              'lvl_relation': {x: [] for x in header}}
     root_lvl_list = []
     for elem in elem_list:
         for i, shift in enumerate([fr'^{init_shift_value}{{{x}}}\w' for x in range(len(header))]):
@@ -69,6 +70,7 @@ def read_raw_fp(init_file_path, init_shift_value):
                     root_lvl_list[i] = elem[i:]
                 except IndexError:
                     root_lvl_list.append(elem[i:])
+                result['lvl_relation'][result['header'][i]].append(root_lvl_list[i])
                 root_lvl_list = root_lvl_list[:i + 1]
 
                 set_in_dict(result['body'], root_lvl_list, {})
@@ -76,22 +78,24 @@ def read_raw_fp(init_file_path, init_shift_value):
 
 
 def run(argv):
-    # TODO Обработка параметров - спрашивать у пользователя подставлять значение по умолчанию
-    # или использовать ручной ввод
+    # TODO Обработка параметров - спрашивать у пользователя подставлять значение по умолчанию или использовать ручной ввод
 
     # Проверяем параметры в argv из консоли, подставляем параметры по умолчанию, если чего-то не хватает
     params = {}
     existing_sub_params = config.cli_params_dict[('-i', '--init')]['sub_params']
     for existing_sub_param_key, existing_sub_param_value in existing_sub_params.items():
         for real_sub_param_key, real_sub_param_value in argv.items() \
-                                                     if len(argv) > 0 \
-                                                     else existing_sub_params.items():
+                if len(argv) > 0 \
+                else existing_sub_params.items():
             if real_sub_param_key in existing_sub_param_key:
                 params[existing_sub_param_key[1]] = real_sub_param_value
                 break
             else:
                 params[existing_sub_param_key[1]] = existing_sub_param_value['default']
+
+    # Записываем системных параметры, не изменяемые пользователем
     params['source_path'] = params['init_dir_path'] + config.source_dir + '/'
+    params['project_name'] = params['init_dir_path'].split('/')[-2]
 
     # Создание каркаса дерева предметов
     data_dict = read_raw_fp(init_file_path=params['init_file_path'],
@@ -103,10 +107,13 @@ def run(argv):
     if not os.path.isdir(params['init_dir_path']):
         os.makedirs(params['source_path'])
 
+    # Запись технических файлов
+    json.dump(data_dict, open(params['source_path'] + params['init_file_path'].split('.')[-2] + '.json', 'w'))
+    json.dump(params, open(params['source_path'] + 'config.json', 'w'))
 
-    # Запись в json файла для каркаса
-    with open(params['source_path'] + params['init_file_path'].split('.')[-2] + '.json', 'w') as fp:
-        json.dump(data_dict, fp)
+    path_project = json.load(open(config.path_project_paths, 'r'))
+    path_project[params['project_name']] = params['init_dir_path']
+    json.dump(path_project, open(config.path_project_paths, 'w'))
 
     make_dir_by_dict(data_dict=data_dict['body'],
                      init_dir_path=params['init_dir_path'])
@@ -115,3 +122,5 @@ def run(argv):
                      file_name='progress.json',
                      json_data=config.progress_file_data,
                      list_lower_lvl_dirs=config.default_list_lower_lvl_dirs)
+
+    conn = sqltools.connect_sqlite(params['source_path'] + 'db.db')

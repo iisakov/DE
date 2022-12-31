@@ -12,11 +12,14 @@ cli_params_dict = {('-i', '--init'): {'description':    'Первый запус
                                       }
                    }
 
+# Системные пути
+path_project_paths = './project_paths.json'
+
 # Обвес для каркасе
 source_dir = 'source_files'
 default_list_lower_lvl_dirs = ['prepared material']
 
-# Папки попадающие в исключения
+# Название папок, попадающих в исключения
 exception_dirs = [source_dir]
 exception_dirs += default_list_lower_lvl_dirs
 
