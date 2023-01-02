@@ -6,8 +6,10 @@ cli_params_dict = {('-i', '--init'): {'description':    'Первый запус
                                                                                              'default':     './raw.txt'},
                                                          ('id', 'init_dir_path'):           {'description': 'Путь до создаваемой базовой структуры курса',
                                                                                              'default':     './default/'},
-                                                         ('is', 'init_shift_value'):        {'description': 'Символ показывающий вложенность объекта',
-                                                                                             'default':     '\t'}
+                                                         ('io', 'init_offset_value'):       {'description': 'Символ показывающий вложенность объекта',
+                                                                                             'default':     '\t'},
+                                                         ('is', 'init_separation_value'):   {'description': 'Символ разделения объектов, зависимость',
+                                                                                             'default':     ':!:'}
                                                          }
                                       }
                    }

@@ -22,7 +22,7 @@ def get_from_dict(data_dict, map_list) -> any:
 # Формат списка ключей [key, ...]
 def set_in_dict(data_dict, map_list, value):
     for k in map_list[:-1]:
-        data_dict = data_dict[k]
+        data_dict = data_dict.setdefault(k, {})
     data_dict[map_list[-1]] = value
 
 
@@ -53,7 +53,7 @@ def furnishing_frame(dir_path, file_name, json_data, list_lower_lvl_dirs=()):
         furnishing_frame(dir_path + dir_name + '/', file_name, json_data, list_lower_lvl_dirs)
 
 
-def read_raw_fp(init_file_path, init_shift_value):
+def read_raw_fp(init_file_path, init_shift_value, init_separation_value):
     # Читаем файл с отступами расположенный по пути path_to_fp.
     with open(init_file_path) as fp:
         header = fp.readline().rstrip('\n').split(init_shift_value)
@@ -63,16 +63,21 @@ def read_raw_fp(init_file_path, init_shift_value):
               'body': {},
               'lvl_relation': {x: [] for x in header}}
     root_lvl_list = []
+    dependencies = {}
     for elem in elem_list:
         for i, shift in enumerate([fr'^{init_shift_value}{{{x}}}\w' for x in range(len(header))]):
+            root_lvl_path = '/'.join(root_lvl_list[:i]) + '/'
             if re.match(shift, elem) is not None:
+                if re.match(fr".*{init_separation_value}.*", elem) is not None:
+                    elem, general_elem = elem.split(init_separation_value)
+                    dependencies[root_lvl_path + elem[i:]] = root_lvl_path + general_elem
                 try:
                     root_lvl_list[i] = elem[i:]
                 except IndexError:
                     root_lvl_list.append(elem[i:])
                 result['lvl_relation'][result['header'][i]].append(root_lvl_list[i])
+                result['dependencies'] = dependencies
                 root_lvl_list = root_lvl_list[:i + 1]
-
                 set_in_dict(result['body'], root_lvl_list, {})
     return result
 
@@ -99,7 +104,8 @@ def run(argv):
 
     # Создание каркаса дерева предметов
     data_dict = read_raw_fp(init_file_path=params['init_file_path'],
-                            init_shift_value=params['init_shift_value'])
+                            init_shift_value=params['init_offset_value'],
+                            init_separation_value=params['init_separation_value'])
 
     # Создание папки для каркаса
     if os.path.isdir(params['init_dir_path']):  # Если папка была создана
@@ -108,7 +114,7 @@ def run(argv):
         os.makedirs(params['source_path'])
 
     # Запись технических файлов
-    json.dump(data_dict, open(params['source_path'] + params['init_file_path'].split('.')[-2] + '.json', 'w'))
+    json.dump(data_dict, open(params['source_path'] + params['project_name'] + '.json', 'w'))
     json.dump(params, open(params['source_path'] + 'config.json', 'w'))
 
     path_project = json.load(open(config.path_project_paths, 'r'))
@@ -123,4 +129,4 @@ def run(argv):
                      json_data=config.progress_file_data,
                      list_lower_lvl_dirs=config.default_list_lower_lvl_dirs)
 
-    conn = sqltools.connect_sqlite(params['source_path'] + 'db.db')
+    conn = sqltools.connect_sqlite(params['source_path'] + f'{params["project_name"]}.db')
