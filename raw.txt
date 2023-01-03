@@ -1,55 +1,56 @@
+Profession	educational discipline	education section	topic
 Data Engineer
 	Math
 		Linear algebra
 			Vectors and spaces
-			Matrix transformations
-			Alternate coordinate systems (bases)
+			Matrix transformations:!:Vectors and spaces
+			Alternate coordinate systems (bases):!:Matrix transformations
 		Precalculus
 			Composite and inverse functions
-			Trigonometry
-			Complex numbers
-			Rational functions
-			Conic sections
-			Vectors
-			Matrices
-			Probability and combinatorics
-			Series
-			Limits and continuity
+			Trigonometry:!:Composite and inverse functions
+			Complex numbers:!:Trigonometry
+			Rational functions:!:Complex numbers
+			Conic sections:!:Rational functions
+			Vectors:!:Conic sections
+			Matrices:!:Vectors
+			Probability and combinatorics:!:Matrices
+			Series:!:Probability and combinatorics
+			Limits and continuity:!:Series
 		Integral Calculus
 			Integrals
-			Differential equations
-			Applications of integrals
-			Parametric equations, polar coordinates, and vector-valued functions
-			Series
+			Differential equations:!:Integrals
+			Applications of integrals:!:Differential equations
+			Parametric equations, polar coordinates, and vector-valued functions:!:Applications of integrals
+			Series:!:Parametric equations, polar coordinates, and vector-valued functions
 		Differential Calculus
 			Limits and continuity
-			Derivatives: definition and basic rules
-			Derivatives: chain rule and other advanced topics
-			Applications of derivatives
-			Analyzing functions
-			Parametric equations, polar coordinates, and vector-valued functions
+			Derivatives: definition and basic rules:!:Limits and continuity
+			Derivatives: chain rule and other advanced topics:!:Derivatives: definition and basic rules
+			Applications of derivatives:!:Derivatives: chain rule and other advanced topics
+			Analyzing functions:!:Applications of derivatives
+			Parametric equations, polar coordinates, and vector-valued functions:!:Analyzing functions
 		Trigonometry
 			Right triangles & trigonometry
-			Trigonometric functions
-			Non-right triangles & trigonometry
-			Trigonometric equations and identities
+			Trigonometric functions:!:Right triangles & trigonometry
+			Non-right triangles & trigonometry:!:Trigonometric functions
+			Trigonometric equations and identities:!:Non-right triangles & trigonometry
 		Statistics and probability
 			Analyzing categorical data
-			Displaying and comparing quantitative data
-			Summarizing quantitative data
-			Modeling data distributions
-			Exploring bivariate numerical data
-			Study design
-			Probability
-			Counting, permutations, and combinations
-			Random variables
-			Sampling distributions
-			Confidence intervals
-			Significance tests (hypothesis testing)
-			Two-sample inference for the difference between groups
-			Inference for categorical data (chi-square tests)
-			Advanced regression (inference and transforming)
-			Analysis of variance (ANOVA)
+			Displaying and comparing quantitative data:!:Analyzing categorical data
+			Summarizing quantitative data:!:Displaying and comparing quantitative data
+			Modeling data distributions:!:Summarizing quantitative data
+			Exploring bivariate numerical data:!:Modeling data distributions
+			Study design:!:Exploring bivariate numerical data
+			Probability:!:Study design
+			Counting, permutations, and combinations:!:Probability
+			Random variables:!:Counting, permutations, and combinations
+			Sampling distributions:!:Random variables
+			Confidence intervals:!:Sampling distributions
+			Significance tests (hypothesis testing):!:Confidence intervals
+			Two-sample inference for the difference between groups:!:Significance tests (hypothesis testing)
+			Inference for categorical data (chi-square tests):!:Two-sample inference for the difference between groups
+			Advanced regression (inference and transforming):!:Inference for categorical data (chi-square tests)
+			Analysis of variance (ANOVA):!:Advanced regression (inference and transforming)
 	English
 		A
 			A1
@@ -57,29 +58,29 @@ Data Engineer
 				Listening
 				Writing
 				Grammar
-			A2
+			A2:!:A1
 				Reading
 				Listening
 				Writing
 				Grammar
-		B
+		B:!:A
 			B1
 				Reading
 				Listening
 				Writing
 				Grammar
-			B2
+			B2:!:B1
 				Reading
 				Listening
 				Writing
 				Grammar
-		C
+		C:!:B
 			C1
 				Reading
 				Listening
 				Writing
 				Grammar
-			C2
+			C2:!:C1
 				Reading
 				Listening
 				Writing

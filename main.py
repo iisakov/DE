@@ -9,6 +9,8 @@ from itertools import chain
 
 from importlib import import_module
 
+# todo добавить модуль calculate_progress для пересчёта прогресса
+# todo добавить модуль selection для выбора предмета для изучения сегодня
 
 def main(cli_params):
     # Чтение параметров из консоли
