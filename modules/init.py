@@ -94,7 +94,7 @@ def read_raw_fp(init_file_path, init_shift_value, init_separation_value, init_op
                 if re.match(fr".*{init_separation_value}.*", elem) is not None:
                     elem_list = elem.split(init_separation_value)
                     elem, general_elem = elem_list
-                    result['dependencies'][root_lvl_path + elem[i:]] = root_lvl_path + general_elem
+                    result['dependencies'][root_lvl_path + elem[i:] + '/'] = root_lvl_path + general_elem + '/'
 
                 # Запись дополнительных настроек в result['options']
                 result['options'][root_lvl_path + re.sub(options_pattern, '', elem[i:]).strip(' ') + '/'] = {}
