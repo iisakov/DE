@@ -1,3 +1,4 @@
+import datetime
 import shutil
 import config
 import os
@@ -41,15 +42,6 @@ def furnishing_frame(dir_path, file_name, source_path, project_name, list_lower_
     current_dir_name = dir_path.split('/')[-2]
     current_json_data_key = '/'.join(dir_path.split('/')[2:])
     if current_dir_name not in config.exception_dirs and current_json_data_key != '':
-        importance = json_data[current_json_data_key]['importance']
-        hours_spent = json_data[current_json_data_key]['hours_spent']
-        required_number_of_hours = json_data[current_json_data_key]['required_number_of_hours']
-        percentage_of_completion = hours_spent * 100 / required_number_of_hours
-        score = importance * 100 - percentage_of_completion * importance if hours_spent != 0 else 100 * importance
-
-        json_data[current_json_data_key]['current_dir_name'] = current_dir_name
-        json_data[current_json_data_key]['score'] = score
-
         json.dump(json_data[current_json_data_key], open(dir_path + file_name, 'w'))
 
     # Получаем все папки не попавшие в исключения
@@ -63,6 +55,26 @@ def furnishing_frame(dir_path, file_name, source_path, project_name, list_lower_
     # Рекурсивно проходим по всем папкам в каркасе
     for dir_name in list_dir:
         furnishing_frame(dir_path + dir_name + '/', file_name, source_path, project_name, list_lower_lvl_dirs)
+
+
+def prepare_data(raw_data) -> dict:
+    result = {}
+    lvl_relation = raw_data['lvl_relation']
+    dependencies = raw_data['dependencies']
+    options = raw_data['options']
+    for lvl_name, elements in lvl_relation.items():
+        result[lvl_name] = []
+        for option_name, option_value in options.items():
+            if option_value['name'] in elements:
+                if option_name in dependencies.keys():
+                    option_value['dependence'] = True
+                    option_value['general_element_path'] = dependencies[option_name]
+                else:
+                    option_value['dependence'] = False
+
+                result[lvl_name].append(option_value)
+
+    return result
 
 
 def read_raw_fp(init_file_path, init_shift_value, init_separation_value, init_option_start_value, init_option_end_value):
@@ -97,9 +109,10 @@ def read_raw_fp(init_file_path, init_shift_value, init_separation_value, init_op
                     result['dependencies'][root_lvl_path + elem[i:] + '/'] = root_lvl_path + general_elem + '/'
 
                 # Запись дополнительных настроек в result['options']
-                result['options'][root_lvl_path + re.sub(options_pattern, '', elem[i:]).strip(' ') + '/'] = {}
+                elem_path = root_lvl_path + re.sub(options_pattern, '', elem[i:]).strip(' ') + '/'
+                result['options'][elem_path] = {'name': elem[i:]}
                 for exist_option, exist_options_value in config.cli_params_dict[('-i', '--init')]['options'].items():
-                    result['options'][root_lvl_path + re.sub(options_pattern, '', elem[i:]).strip(' ') + '/'][exist_option] = exist_options_value['default']
+                    result['options'][elem_path][exist_option] = exist_options_value['default']
                     for option in options:
                         option_name, option_value = option.split(':')
                         if str(option_name).strip(' ') in exist_option:
@@ -107,8 +120,28 @@ def read_raw_fp(init_file_path, init_shift_value, init_separation_value, init_op
                                 option_value = bool(option_value)
                             elif re.match(r'^\-?[1-9][0-9]*(\.[0-9]+)?$|^[\-]?[0-9](\.[0-9]+)?$', option_value):
                                 option_value = float(option_value)
-                            result['options'][root_lvl_path + re.sub(options_pattern, '', elem[i:]).strip(' ') + '/'][exist_option] = option_value
+                            result['options'][elem_path][exist_option] = option_value
 
+                # Пишем расчётные поля в options
+                importance = result['options'][elem_path]['importance']
+                hours_spent = result['options'][elem_path]['hours_spent']
+                required_number_of_hours = result['options'][elem_path]['required_number_of_hours']
+                percentage_of_completion = hours_spent * 100 / required_number_of_hours
+                score = importance * 100 - percentage_of_completion * importance if hours_spent != 0 else 100 * importance
+
+                try: result['options'][elem_path]['parent_name'] = elem_path.split('/')[-3]
+                except IndexError: result['options'][elem_path]['parent_name'] = None
+
+                result['options'][elem_path]['element_path'] = elem_path
+                result['options'][elem_path]['score'] = score
+
+                # Добавляем системные поля create/update_time/by
+                result['options'][elem_path]['create_time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+                result['options'][elem_path]['create_by'] = 'system'
+                result['options'][elem_path]['update_time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+                result['options'][elem_path]['update_by'] = 'system'
+
+                # определяем вложенность
                 try:
                     root_lvl_list[i] = elem[i:]
                 except IndexError:
@@ -157,6 +190,8 @@ def run(argv):
     json.dump(params, open(params['source_path'] + 'config.json', 'w'))
 
     # Добавление пути к проекту в файл со всеми путями к проектам
+    if not os.path.isfile(config.path_project_paths):
+        open(config.path_project_paths, 'w').write('{}')
     path_project = json.load(open(config.path_project_paths, 'r'))
     path_project[params['project_name']] = params['init_dir_path']
     json.dump(path_project, open(config.path_project_paths, 'w'))
@@ -172,4 +207,16 @@ def run(argv):
                      source_path=params['source_path'],
                      project_name=params['project_name'])
 
+    # Создание базы данных для проекта
+    table_columns = sqltools.create_table_columns_list('init')
     conn = sqltools.connect_sqlite(params['source_path'] + f'{params["project_name"]}.db')
+    sqltools.create_table(conn=conn,
+                          table_names=data_dict['header'],
+                          table_columns=table_columns)
+
+    # Запись первоначальной информации
+    insert_data = prepare_data(raw_data=data_dict)
+    sqltools.insert_in_table(conn=conn,
+                             insert_data=insert_data)
+
+    conn.close()

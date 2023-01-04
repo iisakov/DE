@@ -33,7 +33,23 @@ cli_params_dict = {('-i', '--init'): {'description':    'Первый запус
                                                          'required_number_of_hours':    {'description': "Рекомендуемое время для изучения элемента"
                                                                                                         "по умолчанию 20.0",
                                                                                          'default': 20.0}
-                                                         }
+                                                         },
+                                      'main_columns':   {'id':                          'INTEGER PRIMARY KEY',
+                                                         'name':                        'TEXT NOT NULL',
+                                                         'parent_name':                 'TEXT',
+                                                         'importance':                  'FLOAT',
+                                                         'init_study':                  'BOOL',
+                                                         'exam_complete':               'BOOL',
+                                                         'hours_spent':                 'FLOAT',
+                                                         'required_number_of_hours':    'FLOAT',
+                                                         'score':                       'FLOAT',
+                                                         'element_path':                'TEXT',
+                                                         'dependence':                  'BOOL',
+                                                         'general_element_path':        'TEXT',
+                                                         'create_time':                 'TEXT',
+                                                         'create_by':                   'TEXT',
+                                                         'update_time':                 'TEXT',
+                                                         'update_by':                   'BOOL'}
                                       }
                    }
 # Системные пути

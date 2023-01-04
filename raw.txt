@@ -1,6 +1,6 @@
 Profession	educational discipline	education section	topic
-Data Engineer
-	Math
+Data Engineer (:importance:0.2:)
+	Math:!:CS Fundamentals
 		Linear algebra
 			Vectors and spaces
 			Matrix transformations:!:Vectors and spaces
