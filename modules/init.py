@@ -1,6 +1,10 @@
+# локальные пакеты
+import config
+from . import STL
+
+# общие пакеты
 import datetime
 import shutil
-import config
 import os
 import re
 import json
@@ -152,21 +156,11 @@ def read_raw_fp(init_file_path, init_shift_value, init_separation_value, init_op
     return result
 
 
-def run(argv):
+def run(argv, main_cli_param):
     # TODO Обработка параметров - спрашивать у пользователя подставлять значение по умолчанию или использовать ручной ввод
 
     # Проверяем параметры в argv из консоли, подставляем параметры по умолчанию, если чего-то не хватает
-    params = {}
-    existing_sub_params = config.cli_params_dict[('-i', '--init')]['sub_params']
-    for existing_sub_param_key, existing_sub_param_value in existing_sub_params.items():
-        for real_sub_param_key, real_sub_param_value in argv.items() \
-                if len(argv) > 0 \
-                else existing_sub_params.items():
-            if real_sub_param_key in existing_sub_param_key:
-                params[existing_sub_param_key[1]] = real_sub_param_value
-                break
-            else:
-                params[existing_sub_param_key[1]] = existing_sub_param_value['default']
+    params = STL.get_params(argv, main_cli_param)
 
     # Записываем системных параметры, не изменяемые пользователем
     params['source_path'] = params['init_dir_path'] + config.source_dir + '/'
