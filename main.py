@@ -9,6 +9,7 @@ from importlib import import_module
 
 # todo добавить модуль calculate_progress для пересчёта прогресса
 
+
 def main(cli_params):
     # Чтение параметров из консоли
     cli_params = cli_params[1:]

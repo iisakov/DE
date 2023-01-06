@@ -196,7 +196,7 @@ def run(argv, main_cli_param):
 
     # Обвес проекта разными прелестями
     furnishing_frame(dir_path=params['init_dir_path'],
-                     file_name='progress.json',
+                     file_name='.progress.json',
                      list_lower_lvl_dirs=config.default_list_lower_lvl_dirs,
                      source_path=params['source_path'],
                      project_name=params['project_name'])

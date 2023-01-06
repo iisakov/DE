@@ -108,6 +108,21 @@ Data Engineer
 			VPN VPC
 	Programming Language
 		Python
+			Good Practices
+			Syntax
+			Libraries
+				pandas
+				numpy
+				matplotlib
+				seaborn:!:matplotlib
+				plotly:!:matplotlib
+				bokeh:!:matplotlib
+				altair:!:matplotlib
+				folium:!:matplotlib
+			Frameworks (:importance:0.5:)
+				django:!:flask
+				flask
+				dash:!:flask
 		Scala (:importance:0.7:)
 		Go (:importance:0.7:)
 		Java (:importance:0.5:)
