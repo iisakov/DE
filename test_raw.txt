@@ -1,12 +1,12 @@
 lvl1	lvl2	lvl3	lvl4
 a1
-	b1
-	b2
+	b1 (:importance:0.5:)
+	b2 (:importance:0.7:)
 	b3
 a2:!:a1
 	b1
-		c1
-		c2:!:c1
+		c1 (:importance:0.2:)
+		c2:!:c1 (:importance:0.5:)
 		c3:!:c2
 			d1
 	b2

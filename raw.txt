@@ -1,6 +1,6 @@
-Profession	educational discipline	education section	topic
+Profession	educational discipline	education section	topic	subtopic
 Data Engineer
-	Math
+	Math:!:CS Fundamentals (:importance:0.7:)
 		Linear algebra
 			Vectors and spaces
 			Matrix transformations:!:Vectors and spaces
@@ -29,12 +29,12 @@ Data Engineer
 			Applications of derivatives:!:Derivatives: chain rule and other advanced topics
 			Analyzing functions:!:Applications of derivatives
 			Parametric equations, polar coordinates, and vector-valued functions:!:Analyzing functions
-		Trigonometry
+		Trigonometry (:importance:0.7:)
 			Right triangles & trigonometry
 			Trigonometric functions:!:Right triangles & trigonometry
 			Non-right triangles & trigonometry:!:Trigonometric functions
 			Trigonometric equations and identities:!:Non-right triangles & trigonometry
-		Statistics and probability
+		Statistics and probability (:importance:0.7:)
 			Analyzing categorical data
 			Displaying and comparing quantitative data:!:Analyzing categorical data
 			Summarizing quantitative data:!:Displaying and comparing quantitative data
@@ -51,42 +51,42 @@ Data Engineer
 			Inference for categorical data (chi-square tests):!:Two-sample inference for the difference between groups
 			Advanced regression (inference and transforming):!:Inference for categorical data (chi-square tests)
 			Analysis of variance (ANOVA):!:Advanced regression (inference and transforming)
-	English
+	English (:importance:0.7:)
 		A
 			A1
 				Reading
 				Listening
-				Writing
-				Grammar
+				Writing (:importance:0.5:)
+				Grammar (:importance:0.7:)
 			A2:!:A1
 				Reading
 				Listening
-				Writing
-				Grammar
+				Writing (:importance:0.5:)
+				Grammar (:importance:0.7:)
 		B:!:A
 			B1
 				Reading
 				Listening
-				Writing
-				Grammar
+				Writing (:importance:0.5:)
+				Grammar (:importance:0.7:)
 			B2:!:B1
 				Reading
 				Listening
-				Writing
-				Grammar
-		C:!:B
+				Writing (:importance:0.5:)
+				Grammar (:importance:0.7:)
+		C:!:B (:importance:0.2:)
 			C1
 				Reading
 				Listening
-				Writing
-				Grammar
+				Writing (:importance:0.5:)
+				Grammar (:importance:0.7:)
 			C2:!:C1
 				Reading
 				Listening
-				Writing
-				Grammar
+				Writing (:importance:0.5:)
+				Grammar (:importance:0.7:)
 	CS Fundamentals
-		CS Base
+		CS Base (:importance:0.9:)
 			How does the computer work
 			How does the internet work
 		Data Structures & Algorithms
@@ -95,11 +95,11 @@ Data Engineer
 		Serialization
 		Terminal usage
 		Git
-		Linux
+		Linux (:importance:0.9:)
 			CLI
 			Shell scripting
 			Cron Jobs
-		Networking
+		Networking (:importance:0.9:)
 			Protocols
 				TCP UDP
 				SSH
@@ -108,33 +108,48 @@ Data Engineer
 			VPN VPC
 	Programming Language
 		Python
-		Scala
-		Go
-		Java
+			Good Practices
+			Syntax
+			Libraries
+				pandas
+				numpy
+				matplotlib
+				seaborn:!:matplotlib
+				plotly:!:matplotlib
+				bokeh:!:matplotlib
+				altair:!:matplotlib
+				folium:!:matplotlib
+			Frameworks (:importance:0.5:)
+				django:!:flask
+				flask
+				dash:!:flask
+		Scala (:importance:0.7:)
+		Go (:importance:0.7:)
+		Java (:importance:0.5:)
 	DB Fundamentals
 		SQL
 		ACID Transactions
-		Distributed SQL
+		Distributed SQL (:importance:0.9:)
 			dremio
 			trino
 			presto
-		CAP Theorem
-		OLAP vs OLTP
-		Normalizations
-		Horizontal & Vertical Scaling
-		ER Diagrams
+		CAP Theorem (:importance:0.9:)
+		OLAP vs OLTP (:importance:0.9:)
+		Normalizations (:importance:0.9:)
+		Horizontal & Vertical Scaling (:importance:0.7:)
+		ER Diagrams (:importance:0.7:)
 	Cluster Computing Fundamentals
 		Apache Hadoop
 		HDFS
 		ETL ELT
-		Map Reduce
-		YARN
+		Map Reduce (:importance:0.9:)
+		YARN (:importance:0.9:)
 		Managed Hadoop
 			Yandex Data Proc
-			Apache Ambari
-			Amazon EMR
-			Google Dataproc
-			Azure Data Lake
+			Apache Ambari (:importance:0.5:)
+			Amazon EMR (:importance:0.7:)
+			Google Dataproc (:importance:0.7:)
+			Azure Data Lake (:importance:0.7:)
 	Databases
 		Relational Databases
 			PostgreSQL
@@ -154,24 +169,24 @@ Data Engineer
 			Graph
 				Neo4j
 				ArangoDB
-				Amazon Neptune
+				Amazon Neptune (:importance:0.7:)
 		Data Warehouses
 			Apache Hive
 			ClickHouse
-			Snowflake
-			Apache Impala
-			Amazon Redshift
-			Google BigQuery
-			Azure Synapse
+			Snowflake (:importance:0.9:)
+			Apache Impala (:importance:0.9:)
+			Amazon Redshift (:importance:0.7:)
+			Google BigQuery (:importance:0.7:)
+			Azure Synapse (:importance:0.7:)
 		MPP (Massively Parallel Processing)
 			Greenplume
-			Vertica
-			Teradata
+			Vertica (:importance:0.9:)
+			Teradata (:importance:0.9:)
 		Object Storage
 			Yandex Object Storage
-			Amazone S3
-			Google Cloud Storage
-			Azure Blob Storage
+			Amazone S3 (:importance:0.9:)
+			Google Cloud Storage (:importance:0.7:)
+			Azure Blob Storage (:importance:0.7:)
 		Storage Design
 			Data Warehouse Design
 				Kimball
@@ -190,19 +205,19 @@ Data Engineer
 			DBT (Data Build Tool)
 		Hybrid
 			Apache Spark
-			Apache Beam
-			Apache Flink
-			Apache NiFi
+			Apache Beam (:importance:0.9:)
+			Apache Flink (:importance:0.9:)
+			Apache NiFi (:importance:0.9:)
 		Stream
 			Apache Kafka
-			Apache Storm
-			Amazon Kinesis
-			Google Pub Sub
+			Apache Storm (:importance:0.5:)
+			Amazon Kinesis (:importance:0.7:)
+			Google Pub Sub (:importance:0.7:)
 		Messaging
 			RabbitMQ
 			ActiveMQ
-			Amazon SNS & SQS
-			Azure Service Bus
+			Amazon SNS & SQS (:importance:0.7:)
+			Azure Service Bus (:importance:0.7:)
 	Testing
 		Unit Testing
 			unittest
@@ -216,28 +231,28 @@ Data Engineer
 			Gatling
 	Workflow
 		Apache Airflow
-		Flyte
-		Prefect
-		Google Composer
-		Apache Oozie
-		Luigi
-		Azkaban
+		Flyte (:importance:0.7:)
+		Prefect (:importance:0.9:)
+		Google Composer (:importance:0.7:)
+		Apache Oozie (:importance:0.5:)
+		Luigi (:importance:0.5:)
+		Azkaban (:importance:0.5:)
 	Monitoring
 		Prometheus
-		Datadog
-		Sentry
-		Graphite
+		Datadog (:importance:0.9:)
+		Sentry (:importance:0.9:)
+		Graphite (:importance:0.9:)
 		Graphana
 	Infrastructure
-		Apache Mesos
+		Apache Mesos (:importance:0.5:)
 		Docker
-		Kubernetes
+		Kubernetes (:importance:0.7:)
 		CI CD
 			Jenkins
 			GitHub Pipelines
 			GitLab Pipelines
 			Circle CI
-	Data Governance
+	Data Governance (:importance:0.5:)
 		Approaches
 			Data Catalog
 			Data Lineage
@@ -246,7 +261,7 @@ Data Engineer
 			Atlas
 			Datahub
 			Amundsen
-	Data Security & Privacy
+	Data Security & Privacy (:importance:0.5:)
 		Legal Compliance
 			PCI vs PII vs PHI
 			GDPR
@@ -258,11 +273,11 @@ Data Engineer
 			RSA
 			AES
 			OpenPGP
-	Data Quality
+	Data Quality (:importance:0.5:)
 		great_expectations
 		pydeequ
 		Apache Griffin
-	Visualization (BI)
+	Visualization (BI) (:importance:0.5:)
 		Data structures use cases for BI
 		Data Visualization
 		BI Tools features and specificity
@@ -270,18 +285,18 @@ Data Engineer
 			Qlik
 			Looker
 			Superset
-	Machine Learning
-		Terminologies
+	Machine Learning (:importance:0.7:)
+		Terminologies (:importance:0.7:)
 			Supervised learning
 			Unsupervised learning
 			Evaluation Metrics
-		Classical ML Algorithms
+		Classical ML Algorithms (:importance:0.7:)
 			Linear Regression
 			Decision Tree
 			Random Forest
 			K-Means
 			kNN
-		ML Practices
+		ML Practices (:importance:0.7:)
 			Feature Store
 			Model Tracking
 			Model Serving
@@ -289,9 +304,9 @@ Data Engineer
 		ML Ops
 			DVC
 			MLFlow
-			Kubeflow
-			Amazon SageMaker
-			Google AI Platform
+			Kubeflow (:importance:0.7:)
+			Amazon SageMaker (:importance:0.7:)
+			Google AI Platform (:importance:0.7:)
 			ClearML
 			H2O.AI
 			Tecton

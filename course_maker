@@ -2,15 +2,13 @@
 # локальные пакеты
 import config
 
-
 # общие пакеты
 import sys
 from itertools import chain
-
 from importlib import import_module
 
 # todo добавить модуль calculate_progress для пересчёта прогресса
-# todo добавить модуль selection для выбора предмета для изучения сегодня
+
 
 def main(cli_params):
     # Чтение параметров из консоли
@@ -29,7 +27,7 @@ def main(cli_params):
 
                 # Подключение модуля todo разделить подключение модуля и запуск модуля. В идеале добавить приоритетность запуска модулей
                 module = import_module(config.cli_params_dict[existing_param_tpl]['import_path'])   # Подключаем необходимый модуль
-                module.run(modul_args)                                                              # Запускаем модуль
+                module.run(modul_args, cli_param)                                                   # Запускаем модуль
 
 
 if __name__ == '__main__':
