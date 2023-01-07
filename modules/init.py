@@ -49,7 +49,7 @@ def furnishing_frame(dir_path, file_name, source_path, project_name, list_lower_
         json.dump(json_data[current_json_data_key], open(dir_path + file_name, 'w'))
 
     # Получаем все папки не попавшие в исключения
-    list_dir = [dir_name for dir_name in os.listdir(dir_path) if '.' not in dir_name and dir_name not in config.exception_dirs]
+    list_dir = [dir_name for dir_name in os.listdir(dir_path) if not os.path.isfile(dir_path + dir_name) and dir_name not in config.exception_dirs]
 
     # Если это конечная папка, создаём в ней список папок самого нижнего уровня
     if len(list_dir) == 0:
@@ -127,11 +127,9 @@ def read_raw_fp(init_file_path, init_shift_value, init_separation_value, init_op
                             result['options'][elem_path][exist_option] = option_value
 
                 # Пишем расчётные поля в options
-                importance = result['options'][elem_path]['importance']
-                hours_spent = result['options'][elem_path]['hours_spent']
-                required_number_of_hours = result['options'][elem_path]['required_number_of_hours']
-                percentage_of_completion = hours_spent * 100 / required_number_of_hours
-                score = importance * 100 - percentage_of_completion * importance if hours_spent != 0 else 100 * importance
+                score = STL.compute_score(importance=result['options'][elem_path]['importance'],
+                                          hours_spent=result['options'][elem_path]['hours_spent'],
+                                          required_number_of_hours=result['options'][elem_path]['required_number_of_hours'])
 
                 try: result['options'][elem_path]['parent_name'] = elem_path.split('/')[-3]
                 except IndexError: result['options'][elem_path]['parent_name'] = None

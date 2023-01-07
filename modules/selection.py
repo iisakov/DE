@@ -7,65 +7,34 @@ from . import sqltools
 import json
 
 
-def get_table_list(connection, table_names_list, element_name):
-
-    # Собираем все элементы с именем element_name из всех таблиц списка table_names_list
-    elements = []
-    for table_name in table_names_list:
-        col_names = [row[1] for row in connection.execute(f'PRAGMA table_info("{table_name}")')]                                                # Получаем список названий столбцов таблицы table_name
-        select_str = f'SELECT {", ".join(col_names)} FROM "{table_name}" WHERE exam_complete == 0 and name == "{element_name}"'                 # строка запроса
-        response = [{col_names[i]: elem for i, elem in enumerate(response_row)} for response_row in connection.execute(select_str).fetchall()]  # ответ с названиями полей
-
-        # Добавляем имя таблицы к каждому элементу, так будет проще определить какие таблицы нам не понадобятся
-        for row in response:
-            row['table_name'] = table_name
-            elements.append(row)
-
-    # Если элементов больше одного, нам стоит уточнить, какой же элемент интересует пользователя
-    if len(elements) > 1:
-        print('\nЭлементов больше одного, выберите один из списка:')
-        for i, element in enumerate(elements):
-            print(f'{element["name"]} c родителем {element["parent_name"]}.[{i}]')
-        # Пока у пользователя не получится ввести корректные число. Мы продолжаем его спрашивать.
-        user_input = -1
-        while type(user_input) is str or user_input < 0 or user_input >= len(elements):
-            user_input = input(f'Для выбора введите число от {0} до {len(elements)-1}: ')
-            if user_input.isdigit():
-                user_input = int(user_input)
-            else:
-                print(f'\nОчень смешно, попробуйте ещё раз... {user_input} это не число вообще.')
-                continue
-            if user_input < 0 or user_input >= len(elements):
-                print(f'\nКажется элемента с номером {user_input} не существует, попробуйте ещё раз.')
-        # Из списка элементов оставляем тот элемент, который пожелал пользователь.
-        current_element = elements[user_input]
-    elif len(elements) == 1:
-        current_element = elements[0]
-    else:
-        current_element = None
-
-    # Возвращаем список таблиц и путь до элемента выбранного пользователем
-    if current_element:
-        element_path = '/'.join(current_element['element_path'].split('/')[:-2])                     # Путь до найденного элемента без самого элемента
-        table_names_list = table_names_list[table_names_list.index(current_element['table_name']):]  # Список таблиц, для поиска
-        return table_names_list, element_path
-    else:
-        return table_names_list, None
+def put_last_selected_element_path(path_to_project_source_dir, element_path):
+    project_config_file = json.load(open(path_to_project_source_dir))
+    project_config_file['last_selected_element_path'] = element_path
+    json.dump(project_config_file, open(path_to_project_source_dir, 'w'))
 
 
-def get_element(connection, table_list: list, element_path: [str, None], select_from: [str, None]) -> dict:
+def get_element(connection, table_list: list, parent_element_path: [str, None], select_from: [str, None], last_selected_element: [str, None]) -> dict:
+    print(connection, table_list, parent_element_path, select_from, last_selected_element)
     result = {}
-    like_str = f'%%'                                                             # Строка для добавления туда уже найденных родителей элемента, чтоб выбирать только из них
-    like_str = like_str[:-1] + f'{element_path}%' if element_path else like_str  # Если есть конкретный элемент, который мы хотим найти - добавляем путь до него
-    parent_name = None                                                           # Родительский элемент
-    addition_to_score = 100 if select_from else 0                                # Для гибкой настройки выбора элементов используем добавку к счёту
+    like_str = f'%%'                                                                            # Строка для добавления туда уже найденных родителей элемента, чтоб выбирать только из них
+    like_str = like_str[:-1] + f'{parent_element_path}%' if parent_element_path else like_str   # Если есть конкретный элемент, который мы хотим найти - добавляем путь до него
+    parent_name = None                                                                          # Родительский элемент
+    addition_str = ''
+    if last_selected_element:
+        addition_to_score = 20
+        addition_element = last_selected_element
+        addition_str = f'case when element_path == "{addition_element}" then score + {addition_to_score} else score end as '
+    if select_from:
+        addition_to_score = 100
+        addition_element = select_from
+        addition_str = f'case when name == "{addition_element}" then score + {addition_to_score} else score end as '
+
     for num_table, name_table in enumerate(table_list):
         col_names = ['name', 'element_path', 'dependence', 'general_element_path']
 
         # Генерим строку запроса (Наверное стоит вынести это в отдельную функцию и разобраться получше, но пока работает так)
         select_str = f'SELECT {",".join(col_names)}, '
-        if select_from:
-            select_str += f'case when name == "{select_from}" then score + {addition_to_score} else score end as '
+        select_str += addition_str
         select_str += f'score FROM "{name_table}" WHERE exam_complete == 0 and element_path LIKE "{like_str}"'
         if parent_name:
             select_str += f' and parent_name = "{parent_name}"'
@@ -95,26 +64,28 @@ def get_element(connection, table_list: list, element_path: [str, None], select_
 
 
 def run(argv, main_cli_param):
-    params = STL.get_params(argv, main_cli_param)                                                                     # Параметры для модуля
-    params['path_to_project'] = json.load(open(config.path_project_paths))[params['project']]                         # Путь до проекта
-    params['path_to_project_source_dir'] = params['path_to_project'] + config.source_dir                              # Путь до папки с настройками проекта
-    params['conn'] = sqltools.connect_sqlite(params['path_to_project_source_dir'] + params['project'] + '.db')        # Подключение к базе проекта
-    params['header'] = json.load(open(params['path_to_project_source_dir'] + params['project'] + '.json'))['header']  # Список header для дерева элементов
-    params['table_list'], params['element_path'] = get_table_list(connection=params['conn'],                          # Список таблиц для проверки и путь до элемента
-                                                                  table_names_list=params['header'],
-                                                                  element_name=params['select_from'])
+    params = STL.get_params(argv, main_cli_param)                                                                      # Параметры для модуля
+    params['path_to_project'] = json.load(open(config.path_project_paths))[params['project']]                          # Путь до проекта
+    params['path_to_project_source_dir'] = params['path_to_project'] + config.source_dir                               # Путь до папки с настройками проекта
+    params['conn'] = sqltools.connect_sqlite(params['path_to_project_source_dir'] + params['project'] + '.db')         # Подключение к базе проекта
+    params['path_to_project_config_file'] = params['path_to_project_source_dir'] + 'config.json'                       # Путь до конфигурационного файла проекта
+    params = params | json.load(open(params['path_to_project_config_file']))
+    params['header'] = json.load(open(params['path_to_project_source_dir'] + params['project'] + '.json'))['header']   # Список header для дерева элементов
+
+
+
+    # Список таблиц для проверки и путь до элемента
+    params['table_list'], params['parent_element_path'] = STL.get_table_list(connection=params['conn'],
+                                                                             table_names_list=params['header'],
+                                                                             element_name=params['select_from'])
 
     # Получаем элемент для изучения
     element = get_element(connection=params['conn'],
                           table_list=params['table_list'],
-                          element_path=params['element_path'],
-                          select_from=params['select_from'])
+                          parent_element_path=params['parent_element_path'],
+                          select_from=params['select_from'],
+                          last_selected_element=params['last_selected_element_path'] if 'last_selected_element_path' in params else None)
     params['conn'].close()
+    put_last_selected_element_path(params['path_to_project_config_file'], element['element_path'])
     print(f'Открываю папку с элементом {element["name"]}. Его счёт на данный момент {element["score"]} С учётом надбавок. Желаю провести время с пользой')
-
     STL.open_file(path=params['path_to_project'] + element['element_path'])
-
-
-
-
-

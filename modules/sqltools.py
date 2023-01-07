@@ -1,5 +1,6 @@
 import sqlite3
 import config
+import datetime
 
 
 def connect_sqlite(path_to_db):
@@ -17,7 +18,7 @@ def create_table_columns_list(module_name):
     return table_columns_list
 
 
-def create_table(table_names: list, table_columns: dict, conn=sqlite3.Connection):
+def create_table(table_names: list, table_columns: dict, conn: sqlite3.Connection):
     table_columns = [f'"{col_name}" {col_options}' for col_name, col_options in table_columns.items()]
     table_names = ['\"' + x + '\"' for x in table_names]
     for table_name in table_names:
@@ -26,7 +27,7 @@ def create_table(table_names: list, table_columns: dict, conn=sqlite3.Connection
         conn.commit()
 
 
-def insert_in_table(insert_data: dict, conn=sqlite3.Connection):
+def insert_in_table(insert_data: dict, conn: sqlite3.Connection):
     """
     Множественная запись в БД.
     :param table_names: Список таблиц
@@ -47,6 +48,18 @@ def insert_in_table(insert_data: dict, conn=sqlite3.Connection):
 
     conn.commit()
 
+
+def update_rows(update_data: dict, conn: sqlite3.Connection):
+    for table_name, elements in update_data.items():
+        for row in elements:
+            row['update_time'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S:%f')
+            row['update_by'] = 'user'
+            update_cols_str = ", ".join([f"{col} = ?" for col in row if col != "id"])
+            update_str = f'UPDATE "{table_name}" SET {update_cols_str} WHERE id = ?'
+            element_date = [col for col in list(row.values())[1:]]
+            element_date.append(row['id'])
+            conn.execute(update_str, element_date)
+            conn.commit()
 
 if __name__ == '__main__':
     pass
