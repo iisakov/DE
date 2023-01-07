@@ -196,7 +196,7 @@ def run(argv, main_cli_param):
 
     # Обвес проекта разными прелестями
     furnishing_frame(dir_path=params['init_dir_path'],
-                     file_name='.progress.json',
+                     file_name=config.element_source_file['progress'],
                      list_lower_lvl_dirs=config.default_list_lower_lvl_dirs,
                      source_path=params['source_path'],
                      project_name=params['project_name'])
@@ -213,4 +213,5 @@ def run(argv, main_cli_param):
     sqltools.insert_in_table(conn=conn,
                              insert_data=insert_data)
 
+    STL.open_file(params['init_dir_path'])
     conn.close()

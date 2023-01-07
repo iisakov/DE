@@ -1,3 +1,14 @@
+# Системные пути
+path_project_paths = './project_paths.json'
+
+# Обвес для каркасе
+element_source_file = {'progress': '.progress.json'}
+source_dir = '.source_files/'
+default_list_lower_lvl_dirs = ['prepared material/']
+
+# Название папок, попадающих в исключения
+exception_dirs = [source_dir.strip('/')]
+exception_dirs += [lower_lvl_dir.strip('/') for lower_lvl_dir in default_list_lower_lvl_dirs]
 
 # Справочник аргументов CLI
 cli_params_dict = {('-i', '--init'):    {'description':    'Первый запуск, создание базовой структуры',
@@ -45,22 +56,26 @@ cli_params_dict = {('-i', '--init'):    {'description':    'Первый зап�
                                          },
                    ('-s', '--select'):  {'description':     'Первый запуск, создание базовой структуры',
                                          'import_path':     'modules.selection',
-                                         'sub_params':      {('sp', 'select_project'):  {'description': "Проект, из которого мы выбираем",
-                                                                                         'default':     'default'},
-                                                             ('sf', 'select_from'):     {'description': "Выбрать из предложенной папки.",
-                                                                                         'default':     None}
+                                         'sub_params':      {('prj', 'project'):    {'description': "Проект, из которого мы выбираем",
+                                                                                     'default':     'default'},
+                                                             ('sf', 'select_from'): {'description': "Выбрать из предложенной папки.",
+                                                                                     'default':     None}
                                                              },
                                          'options':         {},
-                                         }
+                                         },
+                   ('-u', '--update'): {'description':     'Модуль по вычислению различных показателей. (score)',
+                                        'import_path':     'modules.update',
+                                        'sub_params':      {('prj', 'project'):            {'description': "Проект, из которого мы выбираем",
+                                                                                            'default':     'default'},
+                                                            ('ue', 'update_element'):      {'description': "Обновить в определённой папке.",
+                                                                                            'default':     None},
+                                                            ('ui', 'update_indicator'):    {'description': "Обновить(заменить) определённые показатели."
+                                                                                                           f" по умолчанию все в файле {element_source_file['progress']}",
+                                                                                            'default':     None},
+                                                            ('ua', 'update_add'):          {'description': "Добавить определённый показатель "
+                                                                                                           "(везде, если не указан параметр ue).",
+                                                                                            'default':     None}
+                                                            },
+                                        'options':         {},
+                                             }
                    }
-
-# Системные пути
-path_project_paths = './project_paths.json'
-
-# Обвес для каркасе
-source_dir = '.source_files/'
-default_list_lower_lvl_dirs = ['prepared material/']
-
-# Название папок, попадающих в исключения
-exception_dirs = [source_dir.strip('/')]
-exception_dirs += [lower_lvl_dir.strip('/') for lower_lvl_dir in default_list_lower_lvl_dirs]

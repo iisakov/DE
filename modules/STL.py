@@ -1,4 +1,24 @@
 import config
+import os
+import platform
+import subprocess
+from time import sleep
+
+
+def open_file(path):
+    """
+    Открыть папку в проводнике платформы
+    :param path: Путь к папке.
+    :return: Void
+    """
+    sleep(1)
+    if platform.system() == "Windows":
+        os.startfile(path)
+    elif platform.system() == "Darwin":
+        subprocess.Popen(["open", path])
+    else:
+        subprocess.Popen(["xdg-open", path])
+    sleep(5)
 
 
 def get_params(sub_cli_param, main_cli_param) -> dict:

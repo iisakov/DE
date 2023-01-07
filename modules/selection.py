@@ -1,24 +1,10 @@
 # локальные пакеты
-from time import sleep
-
 import config
 from . import STL
 from . import sqltools
 
 # общие пакеты
 import json
-import os
-import platform
-import subprocess
-
-
-def open_file(path):
-    if platform.system() == "Windows":
-        os.startfile(path)
-    elif platform.system() == "Darwin":
-        subprocess.Popen(["open", path])
-    else:
-        subprocess.Popen(["xdg-open", path])
 
 
 def get_table_list(connection, table_names_list, element_name):
@@ -109,12 +95,12 @@ def get_element(connection, table_list: list, element_path: [str, None], select_
 
 
 def run(argv, main_cli_param):
-    params = STL.get_params(argv, main_cli_param)                                                                            # Параметры для модуля
-    params['path_to_project'] = json.load(open(config.path_project_paths))[params['select_project']]                         # Путь до проекта
-    params['path_to_project_source_dir'] = params['path_to_project'] + config.source_dir                                     # Путь до папки с настройками проекта
-    params['conn'] = sqltools.connect_sqlite(params['path_to_project_source_dir'] + params['select_project'] + '.db')        # Подключение к базе проекта
-    params['header'] = json.load(open(params['path_to_project_source_dir'] + params['select_project'] + '.json'))['header']  # Список header для дерева элементов
-    params['table_list'], params['element_path'] = get_table_list(connection=params['conn'],                                 # Список таблиц для проверки и путь до элемента
+    params = STL.get_params(argv, main_cli_param)                                                                     # Параметры для модуля
+    params['path_to_project'] = json.load(open(config.path_project_paths))[params['project']]                         # Путь до проекта
+    params['path_to_project_source_dir'] = params['path_to_project'] + config.source_dir                              # Путь до папки с настройками проекта
+    params['conn'] = sqltools.connect_sqlite(params['path_to_project_source_dir'] + params['project'] + '.db')        # Подключение к базе проекта
+    params['header'] = json.load(open(params['path_to_project_source_dir'] + params['project'] + '.json'))['header']  # Список header для дерева элементов
+    params['table_list'], params['element_path'] = get_table_list(connection=params['conn'],                          # Список таблиц для проверки и путь до элемента
                                                                   table_names_list=params['header'],
                                                                   element_name=params['select_from'])
 
@@ -125,9 +111,9 @@ def run(argv, main_cli_param):
                           select_from=params['select_from'])
     params['conn'].close()
     print(f'Открываю папку с элементом {element["name"]}. Его счёт на данный момент {element["score"]} С учётом надбавок. Желаю провести время с пользой')
-    sleep(1)
-    open_file(path=params['path_to_project'] + element['element_path'])
-    sleep(1)
+
+    STL.open_file(path=params['path_to_project'] + element['element_path'])
+
 
 
 
